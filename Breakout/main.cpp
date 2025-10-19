@@ -2,11 +2,14 @@
 #include "GameManager.h"
 #include <iostream>
 
+#include "AudioManager.h"
+
 int main()
 {
 
     sf::RenderWindow window(sf::VideoMode(1000, 800), "Breakout");
-    GameManager gameManager(&window);
+    AudioManager audioManager;
+    GameManager gameManager(&window, &audioManager);
     gameManager.initialize();
 
     sf::Clock clock;

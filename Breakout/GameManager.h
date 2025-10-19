@@ -8,11 +8,13 @@
 #include "MessagingSystem.h"
 #include "UI.h"
 
+#include "AudioManager.h"
+
 
 
 class GameManager {
 public:
-    GameManager(sf::RenderWindow* window);
+    GameManager(sf::RenderWindow* window, AudioManager* audioManager);
     void initialize();
     void update(float dt);
     void loseLife();
@@ -25,6 +27,9 @@ public:
     PowerupManager* getPowerupManager() const;
     sf::RenderWindow* getWindow() const;
     UI* getUI() const;
+
+protected:
+    AudioManager* audio;
 
 
 private:

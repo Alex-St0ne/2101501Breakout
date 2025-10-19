@@ -3,7 +3,7 @@
 #include "PowerupManager.h"
 #include <iostream>
 
-GameManager::GameManager(sf::RenderWindow* window)
+GameManager::GameManager(sf::RenderWindow* window, AudioManager* audioManager)
     : _window(window), _paddle(nullptr), _ball(nullptr), _brickManager(nullptr), _powerupManager(nullptr),
     _messagingSystem(nullptr), _ui(nullptr), _pause(false), _time(0.f), _lives(3), _pauseHold(0.f), _levelComplete(false),
     _powerupInEffect({ none,0.f }), _timeLastPowerupSpawned(0.f)
@@ -13,6 +13,10 @@ GameManager::GameManager(sf::RenderWindow* window)
     _masterText.setPosition(50, 400);
     _masterText.setCharacterSize(48);
     _masterText.setFillColor(sf::Color::Yellow);
+
+    audio = audioManager;
+
+    audio->addMusic("sfx/BackgroundMusic.wav","music");
 }
 
 void GameManager::initialize()
@@ -34,6 +38,10 @@ void GameManager::update(float dt)
     _ui->updatePowerupText(_powerupInEffect);
     _powerupInEffect.second -= dt;
     
+    if (audio->getMusic()->getStatus() == sf::SoundSource::Stopped)
+    {
+        audio->playMusicbyName("music");
+    }
 
     if (_lives <= 0)
     {
