@@ -72,6 +72,9 @@
     <ClCompile Include="AudioManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PowerupFastPaddle.cpp">
+      <Filter>Powerups</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="MusicObject.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerupFastPaddle.h">
+      <Filter>Powerups</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
