@@ -17,6 +17,10 @@ GameManager::GameManager(sf::RenderWindow* window, AudioManager* audioManager)
     audio = audioManager;
 
     audio->addMusic("sfx/BackgroundMusic.wav","music");
+    audio->addSound("sfx/beep.ogg", "beep");
+    audio->addSound("sfx/break.ogg", "break");
+    audio->addSound("sfx/damage.ogg", "damage");
+    audio->addSound("sfx/game-over.ogg", "defeat");
 }
 
 void GameManager::initialize()
@@ -46,7 +50,10 @@ void GameManager::update(float dt)
     if (_lives <= 0)
     {
         _masterText.setString("Game over.");
+        audio->stopMusic();
+        audio->stopAllSounds();
         return;
+        
     }
     if (_levelComplete)
     {
@@ -79,7 +86,7 @@ void GameManager::update(float dt)
     _time += dt;
 
 
-    if (_time > _timeLastPowerupSpawned + POWERUP_FREQUENCY && rand()%700 == 0)      // TODO parameterise
+    if (_time > _timeLastPowerupSpawned + POWERUP_FREQUENCY && rand()%spawnChance == 0)      // TODO parameterise
     {
         _powerupManager->spawnPowerup();
         _timeLastPowerupSpawned = _time;
@@ -88,6 +95,30 @@ void GameManager::update(float dt)
     // move paddle
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) _paddle->moveRight(dt);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) _paddle->moveLeft(dt);
+
+    //for shaking camera
+    if (shaking)
+    {
+        sf::View view = _window->getView();
+        if (shakeDuration > 0)
+        {
+            float offsetX = rand() % 100;
+            float offsetY = rand() % 100;
+
+           
+            view.setCenter(originalViewX + offsetX, originalViewY + offsetY);
+            _window->setView(view);
+
+            shakeDuration -= shakeFade * dt;
+            
+        }
+        else
+        {
+            shaking = false;
+            view.setCenter(originalViewX, originalViewY);
+            _window->setView(view);
+        }
+    }
 
     // update everything 
     _paddle->update(dt);
@@ -99,7 +130,8 @@ void GameManager::loseLife()
 {
     _lives--;
     _ui->lifeLost(_lives);
-
+    audio->playSoundbyName("damage");
+    shakeCamera(2, 5, 2);
     // TODO screen shake.
 }
 
@@ -116,6 +148,16 @@ void GameManager::render()
 void GameManager::levelComplete()
 {
     _levelComplete = true;
+}
+
+void GameManager::shakeCamera(float duration, float intesity, float fade)
+{
+    shaking = true;
+    shakeDuration = duration;
+    shakeIntesity = intesity;
+    shakeFade = fade;
+    originalViewX = _window->getView().getCenter().x;
+    originalViewY = _window->getView().getCenter().y;
 }
 
 sf::RenderWindow* GameManager::getWindow() const { return _window; }

@@ -51,12 +51,14 @@ void Ball::update(float dt)
     if ((position.x >= windowDimensions.x - 2 * RADIUS && _direction.x > 0) || (position.x <= 0 && _direction.x < 0))
     {
         _direction.x *= -1;
+        _gameManager->audio->playSoundbyName("beep");
     }
 
     // bounce on ceiling
     if (position.y <= 0 && _direction.y < 0)
     {
         _direction.y *= -1;
+        _gameManager->audio->playSoundbyName("beep");
     }
 
     // lose life bounce
@@ -77,6 +79,7 @@ void Ball::update(float dt)
 
         // Adjust position to avoid getting stuck inside the paddle
         _sprite.setPosition(_sprite.getPosition().x, _gameManager->getPaddle()->getBounds().top - 2 * RADIUS);
+        _gameManager->audio->playSoundbyName("beep");
     }
 
     // collision with bricks

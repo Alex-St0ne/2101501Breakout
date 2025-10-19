@@ -22,13 +22,14 @@ public:
     void levelComplete();
     void powerupEffect(POWERUPS pu, float t);
 
+    void shakeCamera(float duration, float intesity, float fade);
+
     Paddle* getPaddle() const;
     BrickManager* getBrickManager() const;
     PowerupManager* getPowerupManager() const;
     sf::RenderWindow* getWindow() const;
     UI* getUI() const;
 
-protected:
     AudioManager* audio;
 
 
@@ -51,6 +52,15 @@ private:
     PowerupManager* _powerupManager;
     MessagingSystem* _messagingSystem;
     UI* _ui;
+
+    int spawnChance = 700;
+
+    bool shaking = false;
+    float shakeDuration = 0.0f;
+    float shakeIntesity = 0.0f;
+    float shakeFade = 0.5f;
+    float originalViewX = 0.0f;
+    float originalViewY = 0.0f;
 
     static constexpr float PAUSE_TIME_BUFFER = 0.5f;
     static constexpr float POWERUP_FREQUENCY = 7.5f;    // time between minimum powerup spawn
