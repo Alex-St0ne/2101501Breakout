@@ -33,6 +33,7 @@ fire ball (green)
 
 # Time Details and Changelist
 Time Taken: 4 hours
+
 Tasks done:
 * Fixed compiler issue
 * Added audio manager that allows for both music and sound effects to be played
