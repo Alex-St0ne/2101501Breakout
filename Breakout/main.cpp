@@ -14,7 +14,7 @@ int main()
 
     sf::Clock clock;
     float deltaTime;
-
+    
     while (window.isOpen())
     {
         sf::Event event;

@@ -62,7 +62,7 @@ void UI::updatePowerupText(std::pair<POWERUPS, float> powerup)
 		break;
 	case fastPaddle:
 		oss << std::fixed << std::setprecision(2) << powerup.second;
-		_powerupText.setString("speed boost " + oss.str());
+		_powerupText.setString("speed" + oss.str());
 		_powerupText.setFillColor(extraBallEffectsColour);
 		break;
 	case none:

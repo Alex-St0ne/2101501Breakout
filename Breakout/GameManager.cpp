@@ -2,6 +2,11 @@
 #include "Ball.h"
 #include "PowerupManager.h"
 #include <iostream>
+#include <chrono>
+#include <thread>
+
+using namespace std::this_thread;
+using namespace std::chrono;
 
 GameManager::GameManager(sf::RenderWindow* window, AudioManager* audioManager)
     : _window(window), _paddle(nullptr), _ball(nullptr), _brickManager(nullptr), _powerupManager(nullptr),
@@ -20,7 +25,8 @@ GameManager::GameManager(sf::RenderWindow* window, AudioManager* audioManager)
     audio->addSound("sfx/beep.ogg", "beep");
     audio->addSound("sfx/break.ogg", "break");
     audio->addSound("sfx/damage.ogg", "damage");
-    audio->addSound("sfx/game-over.ogg", "defeat");
+
+    audio->getSound("break")->setVolume(20);
 }
 
 void GameManager::initialize()
@@ -49,16 +55,17 @@ void GameManager::update(float dt)
 
     if (_lives <= 0)
     {
-        _masterText.setString("Game over.");
+        _masterText.setString("Game over. Press enter to Exit");
         audio->stopMusic();
         audio->stopAllSounds();
-        return;
+        return;        
         
     }
     if (_levelComplete)
-    {
-        _masterText.setString("Level completed.");
-        return;
+    {  
+
+       return;
+        
     }
     // pause and pause handling
     if (_pauseHold > 0.f) _pauseHold -= dt;
@@ -102,8 +109,8 @@ void GameManager::update(float dt)
         sf::View view = _window->getView();
         if (shakeDuration > 0)
         {
-            float offsetX = rand() % 100;
-            float offsetY = rand() % 100;
+            float offsetX = rand() % shakeX;
+            float offsetY = rand() % shakeY;
 
            
             view.setCenter(originalViewX + offsetX, originalViewY + offsetY);
@@ -131,7 +138,7 @@ void GameManager::loseLife()
     _lives--;
     _ui->lifeLost(_lives);
     audio->playSoundbyName("damage");
-    shakeCamera(2, 5, 2);
+    shakeCamera(2, 50,50,5);
     // TODO screen shake.
 }
 
@@ -150,11 +157,12 @@ void GameManager::levelComplete()
     _levelComplete = true;
 }
 
-void GameManager::shakeCamera(float duration, float intesity, float fade)
+void GameManager::shakeCamera(float duration, int x, int y, float fade)
 {
     shaking = true;
     shakeDuration = duration;
-    shakeIntesity = intesity;
+    shakeX = x;
+    shakeY = y;
     shakeFade = fade;
     originalViewX = _window->getView().getCenter().x;
     originalViewY = _window->getView().getCenter().y;

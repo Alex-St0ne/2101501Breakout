@@ -22,7 +22,7 @@ public:
     void levelComplete();
     void powerupEffect(POWERUPS pu, float t);
 
-    void shakeCamera(float duration, float intesity, float fade);
+    void shakeCamera(float duration, int x, int y, float fade);
 
     Paddle* getPaddle() const;
     BrickManager* getBrickManager() const;
@@ -57,8 +57,9 @@ private:
 
     bool shaking = false;
     float shakeDuration = 0.0f;
-    float shakeIntesity = 0.0f;
     float shakeFade = 0.5f;
+    int shakeX = 0;
+    int shakeY = 0;
     float originalViewX = 0.0f;
     float originalViewY = 0.0f;
 
